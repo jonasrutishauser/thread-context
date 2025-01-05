@@ -12,7 +12,8 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-@ExtendWith(ArquillianExtension.class) class ArcTest extends ThreadSafeScopedTest {
+@ExtendWith(ArquillianExtension.class)
+class ArcTest extends ThreadSafeScopedTest {
 
     @Deployment
     static JavaArchive createDeployment() {

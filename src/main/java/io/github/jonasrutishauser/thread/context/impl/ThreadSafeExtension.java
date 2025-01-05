@@ -32,8 +32,7 @@ public class ThreadSafeExtension implements Extension {
     <T> void addInterceptor(@Observes ProcessProducer<?, T> event, BeanManager beanManager) {
         if (event.getAnnotatedMember().isAnnotationPresent(ThreadSafeScoped.class)) {
             Type baseType = event.getAnnotatedMember().getBaseType();
-            Type producedClass = baseType instanceof ParameterizedType ? ((ParameterizedType) baseType).getRawType()
-                    : baseType;
+            Type producedClass = baseType instanceof ParameterizedType type ? type.getRawType() : baseType;
             Producer<T> producer = event.getProducer();
             event.configureProducer().produceWith(ctx -> {
                 T bean = producer.produce(ctx);
