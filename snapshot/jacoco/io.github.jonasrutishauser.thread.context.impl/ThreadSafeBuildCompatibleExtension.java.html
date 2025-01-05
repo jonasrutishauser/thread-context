@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang=""><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ThreadSafeBuildCompatibleExtension.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Thread Safe Context</a> &gt; <a href="index.source.html" class="el_package">io.github.jonasrutishauser.thread.context.impl</a> &gt; <span class="el_source">ThreadSafeBuildCompatibleExtension.java</span></div><h1>ThreadSafeBuildCompatibleExtension.java</h1><pre class="source lang-java linenums">package io.github.jonasrutishauser.thread.context.impl;
+
+import static jakarta.interceptor.Interceptor.Priority.LIBRARY_AFTER;
+import static jakarta.interceptor.Interceptor.Priority.LIBRARY_BEFORE;
+
+import io.github.jonasrutishauser.thread.context.ThreadSafeScoped;
+import jakarta.annotation.Priority;
+import jakarta.enterprise.event.Shutdown;
+import jakarta.enterprise.inject.build.compatible.spi.BeanInfo;
+import jakarta.enterprise.inject.build.compatible.spi.BuildCompatibleExtension;
+import jakarta.enterprise.inject.build.compatible.spi.ClassConfig;
+import jakarta.enterprise.inject.build.compatible.spi.Discovery;
+import jakarta.enterprise.inject.build.compatible.spi.Enhancement;
+import jakarta.enterprise.inject.build.compatible.spi.Messages;
+import jakarta.enterprise.inject.build.compatible.spi.MetaAnnotations;
+import jakarta.enterprise.inject.build.compatible.spi.Parameters;
+import jakarta.enterprise.inject.build.compatible.spi.Registration;
+import jakarta.enterprise.inject.build.compatible.spi.SkipIfPortableExtensionPresent;
+import jakarta.enterprise.inject.build.compatible.spi.Synthesis;
+import jakarta.enterprise.inject.build.compatible.spi.SyntheticComponents;
+import jakarta.enterprise.inject.build.compatible.spi.SyntheticObserver;
+import jakarta.enterprise.inject.build.compatible.spi.Types;
+import jakarta.enterprise.inject.spi.CDI;
+import jakarta.enterprise.inject.spi.EventContext;
+
+@SkipIfPortableExtensionPresent(ThreadSafeExtension.class)
+<span class="fc" id="L27">public class ThreadSafeBuildCompatibleExtension implements BuildCompatibleExtension {</span>
+
+    @Priority(LIBRARY_BEFORE + 500)
+    @Discovery
+    public void addContext(MetaAnnotations metaAnnotations) {
+<span class="fc" id="L32">        metaAnnotations.addContext(ThreadSafeScoped.class, true, ThreadSafeContext.class);</span>
+<span class="fc" id="L33">    }</span>
+
+    @Priority(LIBRARY_AFTER + 900)
+    @Enhancement(types = Object.class, withSubtypes = true, withAnnotations = ThreadSafeScoped.class)
+    public void addInterceptor(ClassConfig classConfig) {
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (classConfig.info().hasAnnotation(ThreadSafeScoped.class)) {</span>
+<span class="fc" id="L39">            classConfig.addAnnotation(ThreadSafeScopedInterceptor.class);</span>
+        }
+<span class="fc" id="L41">    }</span>
+
+    @Registration(types = Object.class)
+    public void validateThreadSafeScopedBeans(BeanInfo bean, Messages messages) {
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        if (&quot;io.github.jonasrutishauser.thread.context.ThreadSafeScoped&quot;.equals(bean.scope().name())</span>
+<span class="pc bpc" id="L46" title="2 of 4 branches missed.">                &amp;&amp; (bean.isProducerField() || bean.isProducerMethod())) {</span>
+<span class="nc" id="L47">            messages.error(&quot;ThreadSafeScoped is not allowed on producer field or producer method in CDI Light&quot;, bean);</span>
+        }
+<span class="fc" id="L49">    }</span>
+
+    @Priority(LIBRARY_BEFORE + 500)
+    @Synthesis
+    public void registerScopeShutdown(SyntheticComponents components, Types types) {
+<span class="fc" id="L54">        components.addObserver(Shutdown.class) //</span>
+<span class="fc" id="L55">                .priority(LIBRARY_AFTER + 900) //</span>
+<span class="fc" id="L56">                .observeWith(ScopeShutdown.class);</span>
+<span class="fc" id="L57">    }</span>
+
+<span class="fc" id="L59">    public static class ScopeShutdown implements SyntheticObserver&lt;Shutdown&gt; {</span>
+        @Override
+        public void observe(EventContext&lt;Shutdown&gt; event, Parameters params) throws Exception {
+<span class="fc" id="L62">            ((ThreadSafeContext) CDI.current().getBeanManager().getContext(ThreadSafeScoped.class)).shutdown();</span>
+<span class="fc" id="L63">        }</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
