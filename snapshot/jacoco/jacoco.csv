@@ -1,7 +1,7 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 Thread Safe Context,io.github.jonasrutishauser.thread.context.impl,ThreadSafeBuildCompatibleExtension,4,41,3,5,1,13,3,6,0,5
 Thread Safe Context,io.github.jonasrutishauser.thread.context.impl,ThreadSafeContext,37,205,8,14,6,39,8,18,2,13
-Thread Safe Context,io.github.jonasrutishauser.thread.context.impl,ThreadSafeExtension,17,104,1,5,5,29,1,10,0,8
+Thread Safe Context,io.github.jonasrutishauser.thread.context.impl,ThreadSafeExtension,19,104,1,5,5,28,1,10,0,8
 Thread Safe Context,io.github.jonasrutishauser.thread.context.impl,ThreadSafeContextInterceptor,0,27,0,0,0,7,0,2,0,2
 Thread Safe Context,io.github.jonasrutishauser.thread.context.impl,ContextualInstance,0,30,0,2,0,9,0,4,0,3
 Thread Safe Context,io.github.jonasrutishauser.thread.context.impl,ThreadSafeBuildCompatibleExtension.ScopeShutdown,0,10,0,0,0,3,0,2,0,2

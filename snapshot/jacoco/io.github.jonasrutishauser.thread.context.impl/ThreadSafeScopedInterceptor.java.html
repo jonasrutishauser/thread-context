@@ -16,7 +16,7 @@ import jakarta.interceptor.InterceptorBinding;
     class Literal extends AnnotationLiteral&lt;ThreadSafeScopedInterceptor&gt; implements ThreadSafeScopedInterceptor {
         private static final long serialVersionUID = 1L;
 
-<span class="fc" id="L19">        public static ThreadSafeScopedInterceptor INSTANCE = new Literal();</span>
+<span class="fc" id="L19">        public static final ThreadSafeScopedInterceptor INSTANCE = new Literal();</span>
 
         private Literal() {
         }
