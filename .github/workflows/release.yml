@@ -7,6 +7,7 @@ on:
         description: 'Text describing the contents of the release.'
         required: false
         default: ''
+  pull_request:
 
 jobs:
   release:
