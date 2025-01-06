@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>io.github.jonasrutishauser</groupId>
 		<artifactId>parent</artifactId>
-		<version>23</version>
+		<version>25</version>
 	</parent>
 
 	<artifactId>thread-context</artifactId>
